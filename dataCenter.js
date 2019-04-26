@@ -1,20 +1,14 @@
 const express = require('express');
 const app = express();
 const bodyParser =require('body-parser');
+const fs = require('fs');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 
 const port = process.env.PORT || 3000;
 
-const resources = {
-	
-	cpus: 32,
-	//in gb
-	ram: 16,
-	//in gb
-	ssd: 1000,
-}
+const resources = require('./resources');
 
 let remainingResources = resources;
 
@@ -24,12 +18,20 @@ app.post('/dc1', (req,res) => {
 	//the body could contain the a file or simply json of the
 	//resources needed
 	console.log(req.body);
-
+	
 	//this is how we can calculate the remaining resources 
-	remainingResources.cpu = remainingResources.cpus - req.cpus
+	remainingResources.cpus = remainingResources.cpus - req.body.cpus;
+	remainingResources.ram = remainingResources.ram - req.body.ram;
 
 	//send back to the urb the remaining resources
 	res.json(JSON.stringify(remainingResources));
+
+	//make a file
+	fs.writeFile('remainingResources.json', JSON.stringify(remainingResources), (err) => {
+		if (err) throw err;
+		console.log('The file has been saved');
+	});
+
 })
 
 
