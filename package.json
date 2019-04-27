@@ -4,7 +4,8 @@
   "description": "draft dataCenterResources",
   "main": "dataCenter.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dataCenter.js"
   },
   "author": "Israel",
   "license": "ISC",
