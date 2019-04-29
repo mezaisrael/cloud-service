@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const bodyParser =require('body-parser');
 const fs = require('fs');
+const cors = require('cors')
+
+app.use(cors())
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -19,18 +22,18 @@ app.post('/dc1', (req,res) => {
 	//resources needed
 	console.log(req.body);
 	
-	//this is how we can calculate the remaining resources 
-	remainingResources.cpus = remainingResources.cpus - req.body.cpus;
-	remainingResources.ram = remainingResources.ram - req.body.ram;
+	// //this is how we can calculate the remaining resources
+	// remainingResources.cpus = remainingResources.cpus - req.body.cpus;
+	// remainingResources.ram = remainingResources.ram - req.body.ram;
 
 	//send back to the urb the remaining resources
-	res.json(JSON.stringify(remainingResources));
+	res.json(JSON.stringify('POST Received'));
 
 	//make a file
-	fs.writeFile('remainingResources.json', JSON.stringify(remainingResources), (err) => {
-		if (err) throw err;
-		console.log('The file has been saved');
-	});
+	// fs.writeFile('remainingResources.json', JSON.stringify(remainingResources), (err) => {
+	// 	if (err) throw err;
+	// 	console.log('The file has been saved');
+	// });
 
 })
 
