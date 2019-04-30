@@ -3,6 +3,7 @@
 		"requestName": "job-1",
 		"quality": true,
 		"security": false,
+		"backup": true,
 		"endTime": 1577840461
 	}
 ]

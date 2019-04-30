@@ -11,13 +11,20 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 const port = process.env.PORT || 3001;
 
-const resources = require('./resources');
-
-let remainingResources = resources;
+let activeJobs = require('./active-jobs');
 
 app.get('/', (req,res) => {
-    res.send(JSON.stringify(remainingResources));
+    res.send(JSON.stringify(activeJobs));
 });
+
+app.post('/request', (req, res) => {
+    activeJobs.push(req.body);
+    fs.writeFile('./active-jobs.json', JSON.stringify(activeJobs), (err) => {
+    	if (err) throw err;
+    	console.log('Job queued to active');
+    });
+    res.send('Job Queued!');
+})
 
 app.listen(port, () => console.log(`listenin on port ${port}`));
 
