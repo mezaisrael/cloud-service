@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="main.css">
+	<title>URB</title>
+</head>
+<body>
+	<div class="header">
+		<h1>Resources</h1>
+	</div>
+	<div class="buttons">
+		<button id="current-jobs" onclick="currentJobs()">Running Jobs</button>
+
+		<button id="past-jobs" onclick="showHistory()" >History</button>
+	</div>
+	<table class="table table-hover table-dark">
+		<thead align="left">
+			<tr>
+				<th scope="col">job name</th>
+				<th scope="col">quality</th>
+				<th scope="col">security</th>
+				<th scope="col">backup</th>
+				<th id="time-col" scope="col">Time Left</th>
+				<th scope="col">location</th>
+			</tr>
+		</thead>
+		<tbody align="left">
+			<tr>
+				<th scope="row">Cern</th>
+				<td>True</td>
+				<td>False</td>
+				<td>True</td>
+				<td>2hr</td>
+				<td></td>
+			</tr>
+			<tr>
+				<th scope="row">Adamantium</th>
+				<td>Jacob</td>
+				<td>True</td>
+				<td>@fat</td>
+				<td>4hr</td>
+				<td></td>
+			</tr>
+			<tr class="borderBottom">
+				<th scope="row">Nasa</th>
+				<td colspan="2">Larry the Bird</td>
+				<td>@twitter</td>
+				<td>34hr</td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<script src="main.js"></script>
+</body>
+</html>
