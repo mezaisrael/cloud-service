@@ -40,9 +40,9 @@ const addDataToTable = (data) => {
 					"<th>" + currentJob.name + "</th>" +
 					"<td>" + currentJob.quality + "</td>" +
 					"<td>" + currentJob.security + "</td>" +
-					"<td>" + currentJob.quality + "</td>" +
-					"<td>" + currentJob.quality + "</td>" +
-					"<td>" + currentJob.quality + "</td>" +
+					"<td>" + currentJob.backup + "</td>" +
+					"<td>" + currentJob.time + "</td>" +
+					"<td>" + currentJob.location + "</td>" +
 			"</tr>"
 	}
 
