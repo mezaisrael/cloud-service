@@ -7,7 +7,7 @@ let currentJobs = [
 ];
 
 let jobHistory = [
-	new Job("nasa", true,true, true, "12hr", "127.12.123.123")
+	new Job("nasa", true,true, true, "12:00", "127.12.123.123")
 ];
 
 let showCurrentJobs = () => {
@@ -40,9 +40,9 @@ const addDataToTable = (data) => {
 					"<th>" + currentJob.name + "</th>" +
 					"<td>" + currentJob.quality + "</td>" +
 					"<td>" + currentJob.security + "</td>" +
-					"<td>" + currentJob.quality + "</td>" +
-					"<td>" + currentJob.quality + "</td>" +
-					"<td>" + currentJob.quality + "</td>" +
+					"<td>" + currentJob.backup + "</td>" +
+					"<td>" + currentJob.time + "</td>" +
+					"<td>" + currentJob.location + "</td>" +
 			"</tr>"
 	}
 
