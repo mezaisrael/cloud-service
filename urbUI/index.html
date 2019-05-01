@@ -12,11 +12,11 @@
 		<h1>Resources</h1>
 	</div>
 	<div class="buttons">
-		<button id="current-jobs" onclick="currentJobs()">Running Jobs</button>
+		<button id="current-jobs" onclick="showCurrentJobs()">Running Jobs</button>
 
 		<button id="past-jobs" onclick="showHistory()" >History</button>
 	</div>
-	<table class="table table-hover table-dark">
+	<table id="table">
 		<thead align="left">
 			<tr>
 				<th scope="col">job name</th>
@@ -27,33 +27,11 @@
 				<th scope="col">location</th>
 			</tr>
 		</thead>
-		<tbody align="left">
-			<tr>
-				<th scope="row">Cern</th>
-				<td>True</td>
-				<td>False</td>
-				<td>True</td>
-				<td>2hr</td>
-				<td></td>
-			</tr>
-			<tr>
-				<th scope="row">Adamantium</th>
-				<td>Jacob</td>
-				<td>True</td>
-				<td>@fat</td>
-				<td>4hr</td>
-				<td></td>
-			</tr>
-			<tr class="borderBottom">
-				<th scope="row">Nasa</th>
-				<td colspan="2">Larry the Bird</td>
-				<td>@twitter</td>
-				<td>34hr</td>
-				<td></td>
-			</tr>
+		<tbody id="table-body" align="left">
 		</tbody>
 	</table>
 
+	<script src="Job.js"></script>
 	<script src="main.js"></script>
 </body>
 </html>
