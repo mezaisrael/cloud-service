@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "datacenter": "node dataCenter.js",
-    "urb": "node urbService.js"
+    "urb": "node ./urbService/urbService.js",
+    "urb-debug": "node --inspect ./urbService/urbService.js"
   },
   "author": "Israel",
   "license": "ISC",
