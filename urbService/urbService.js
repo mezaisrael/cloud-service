@@ -45,7 +45,35 @@ domains.map(domain => {
 
 // Handle request for new job
 app.post('/request', (req, res) => {
-    activeJobs.push(req.body);
+    // Determine allocation
+    /*
+    * (Quality, Security)
+    * (T,F) -> West
+    * (F,T) -> North
+    * (T,T) -> East
+    * */
+
+    const { quality, security } = req.body;
+    let allocation = 'east1';
+    // True switch, do not change the order.
+    switch (true) {
+        case quality && security:
+            console.log('Quality && Security -> East');
+            allocation = 'east1';
+            break;
+        case quality:
+            console.log('Quality -> West');
+            allocation = 'west1';
+            break;
+        case security:
+            console.log('Security -> North');
+            allocation = 'north1';
+            break;
+        default:
+            break;
+    }
+
+    activeJobs.push({...req.body, allocation});
     fs.writeFile('./urbService/active-jobs.json', JSON.stringify(activeJobs), (err) => {
     	if (err) throw err;
     	console.log('Job queued to active');
