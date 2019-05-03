@@ -1,8 +1,30 @@
+// Sample resource structure
+/*
+	@Params:
+	id (int)
+		- unique integer id to identify the jobs.
+		- we will have to maintain the uniqueness.
+	requestName (string)
+		- request name provided by user to identify their job
+	quality (bool)
+		- true/false flag to determine if they want quality for their job
+	security (bool)
+		- true/false flag to determine if they want security for their job.
+	backup (bool)
+		- true/false flag for additional security
+	endTime (int)
+		- UNIX timestamp of when the job will end. At most for demo will be T+60 sec of submission.
+	allocation (string)
+		- VM/Domain that this job was allocated to based on the user's request and resource availability.
+*/
 [
 	{
-		"requestName": "job-1",
+		"id": 1,
+		"requestName": "For reference purpose",
 		"quality": true,
 		"security": false,
-		"endTime": 1577840461
+		"backup": true,
+		"endTime": 1558314061,
+		"allocation": "east1"
 	}
 ]
