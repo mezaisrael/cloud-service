@@ -1,5 +1,5 @@
 {
-  "name": "Hunter CSCI Honest Resource Broker",
+  "name": "hunter-csci-honest-urb",
   "version": "1.0.0",
   "description": "CSCI Cloud Database Security Project",
   "main": "dataCenter/dataCenter.js",
