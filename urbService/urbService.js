@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const bodyParser =require('body-parser');
 const fs = require('fs');
-const cors = require('cors')
+const cors = require('cors');
+const moment = require('moment');
 
 app.use(cors())
 
@@ -14,6 +15,56 @@ const port = process.env.PORT || 3000;
 
 let activeJobs = require('./active-jobs');
 let completedJobs = require('./completed-jobs');
+
+/*
+    Startup Process
+ */
+// Find the max (last) id of the job.
+let maxId = activeJobs.reduce((acc, job) => {
+    acc = Math.max(job.id, acc);
+    return acc;
+}, 0)
+
+console.log('Before Active:', activeJobs);
+// Transfer all finished (endTime past) jobs from active-jobs to completed-jobs
+let transferFromActiveJobs = activeJobs.reduce((acc, job) => {
+    const endMoment = moment.unix(job.endTime);
+    // If current moment is greater than the end moment of the job, the job had passed.
+    if (moment().diff(endMoment) > 0) {
+        acc.push(job);
+    }
+
+    return acc;
+}, []);
+
+activeJobs = activeJobs.reduce((acc, job) => {
+    // If the current job is not part of the jobs to be transferred to completed,
+    // put it back into the active pool
+    if (!transferFromActiveJobs.find(e => e.id === job.id)) {
+        acc.push(job);
+    }
+    return acc;
+}, [])
+
+console.log('After Active:', activeJobs);
+
+// Update both json files.
+fs.writeFile('./urbService/active-jobs.json', JSON.stringify(activeJobs), (err) => {
+    if (err) throw err;
+    console.log('active-jobs updated');
+});
+
+fs.writeFile('./urbService/completed-jobs.json', JSON.stringify(completedJobs.concat(transferFromActiveJobs)), (err) => {
+    if (err) throw err;
+    console.log('completed-jobs updated');
+});
+
+
+// Filter all finished jobs from active jobs, and then write to completedJobs
+
+/*
+    End Startup Process
+ */
 
 // Mock jobs for dev
 let mockActiveJobs = require('./mock-active-jobs');
@@ -72,8 +123,8 @@ app.post('/request', (req, res) => {
         default:
             break;
     }
-
-    activeJobs.push({...req.body, allocation});
+    maxId++;
+    activeJobs.push({...req.body, id: maxId, allocation});
     fs.writeFile('./urbService/active-jobs.json', JSON.stringify(activeJobs), (err) => {
     	if (err) throw err;
     	console.log('Job queued to active');
@@ -81,5 +132,8 @@ app.post('/request', (req, res) => {
     res.send('Job Queued!');
 })
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+    console.log('Max Id:', maxId);
+});
 
