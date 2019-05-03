@@ -1,11 +1,11 @@
 {
-  "name": "test",
+  "name": "Hunter CSCI Honest Resource Broker",
   "version": "1.0.0",
-  "description": "draft dataCenterResources",
-  "main": "dataCenter.js",
+  "description": "CSCI Cloud Database Security Project",
+  "main": "dataCenter/dataCenter.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "datacenter": "node dataCenter.js",
+    "datacenter": "node ./dataCenter/dataCenter.js",
     "urb": "node ./urbService/urbService.js",
     "urb-debug": "node --inspect ./urbService/urbService.js"
   },
