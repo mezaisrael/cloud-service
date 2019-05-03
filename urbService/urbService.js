@@ -19,13 +19,17 @@ let completedJobs = require('./completed-jobs');
 /*
     Startup Process
  */
-// Find the max (last) id of the job.
+// Find the max (last) id of the job in the system.
 let maxId = activeJobs.reduce((acc, job) => {
     acc = Math.max(job.id, acc);
     return acc;
-}, 0)
+}, 0);
 
-console.log('Before Active:', activeJobs);
+maxId = completedJobs.reduce((acc, job) => {
+    acc = Math.max(job.id, acc);
+    return acc;
+}, maxId);
+
 // Transfer all finished (endTime past) jobs from active-jobs to completed-jobs
 let transferFromActiveJobs = activeJobs.reduce((acc, job) => {
     const endMoment = moment.unix(job.endTime);
@@ -37,6 +41,7 @@ let transferFromActiveJobs = activeJobs.reduce((acc, job) => {
     return acc;
 }, []);
 
+// Filter out the completed jobs from the activeJobs array.
 activeJobs = activeJobs.reduce((acc, job) => {
     // If the current job is not part of the jobs to be transferred to completed,
     // put it back into the active pool
@@ -45,8 +50,6 @@ activeJobs = activeJobs.reduce((acc, job) => {
     }
     return acc;
 }, [])
-
-console.log('After Active:', activeJobs);
 
 // Update both json files.
 fs.writeFile('./urbService/active-jobs.json', JSON.stringify(activeJobs), (err) => {
@@ -58,9 +61,6 @@ fs.writeFile('./urbService/completed-jobs.json', JSON.stringify(completedJobs.co
     if (err) throw err;
     console.log('completed-jobs updated');
 });
-
-
-// Filter all finished jobs from active jobs, and then write to completedJobs
 
 /*
     End Startup Process
