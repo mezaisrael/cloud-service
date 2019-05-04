@@ -17,6 +17,7 @@ socket.on("request", function (data){
     console.log (data.requestName + data.requestQuality + data.requestSecurity);
   })
 });
+
 });
 
 app.use(cors());
@@ -48,6 +49,7 @@ app.post('/dc1', (req,res) => {
   //Load the current html file
   var $ = cheerio.load(fs.readFileSync('datacenterui.html'));
 
+
 //  console.log($('.table-body').contents() + 'test');
 
   console.log(Object.entries(currentRequest));
@@ -76,7 +78,8 @@ app.post('/dc1', (req,res) => {
     }
 
     if(i == 4){
-      $('<th class="currentJobTime">' + currentJobPart + '</th>').appendTo('.table-body');
+      var formattedTime = formatTime(currentJobPart);
+      $('<th class="currentJobTime">' + formatTime(currentJobPart) + '</th>').appendTo('.table-body');
       $('</tr>').appendTo('.table-body');
       console.log('inserted JobTime');
     }
@@ -96,6 +99,15 @@ var json = JSON.stringify({
   fs.writeFileSync('datacenterui.html',$.html()); // Update html file with new html data
 
 });
+
+function formatTime(time){
+  var date = new Date(time*1000);
+  var hours = date.getHours();
+  var minutes = "0" + date.getMinutes();
+  var seconds = "0" + date.getSeconds();
+  var formatted = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+  return formatted;
+}
 
 app.get('/', (req,res) => {
 	res.send('this is the home page');
