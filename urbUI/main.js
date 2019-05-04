@@ -39,13 +39,15 @@ const addDataToTable = (data) => {
 
 
 		// TODO: calculate the time of the job
-		let timeLeft = moment.unix(currentJob.endTime).diff(moment(), 's');
+		let timeLeft = moment.unix(currentJob.endTime).diff(moment(), 's') + ' seconds left';
+		let timeEnded = moment.unix(currentJob.endTime).format('MMMM Do YYYY, h:mm:ss a');
+		const timeDisplay = currentPage === 'active' ? timeLeft : timeEnded;
 		html += "<tr>" +
 					"<th>" + currentJob.requestName + "</th>" +
 					"<td>" + currentJob.quality + "</td>" +
 					"<td>" + currentJob.security + "</td>" +
 					"<td>" + currentJob.backup + "</td>" +
-					"<td>" + timeLeft + " seconds left </td>" +
+					"<td>" + timeDisplay + " </td>" +
 					"<td>" + currentJob.allocation + "</td>" +
 			"</tr>"
 	}
