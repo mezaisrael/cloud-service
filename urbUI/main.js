@@ -1,8 +1,6 @@
 
 let currentJobs = [
 	new Job("cern", true,false, true, "32hr", "123.543.23.34"),
-	new Job("Team 3", false,false, false, "2hr", "123.54.123.34"),
-	new Job("Hunter College", false,true, false, "32hr", "123.543.23.34"),
 
 ];
 
@@ -11,10 +9,12 @@ let jobHistory = [
 ];
 
 let showCurrentJobs = () => {
+	console.log('showing curretn jobs');
 	//change the time label
-	let time = document.getElementById("time-col");
-	time.innerHTML = "Time Left";
+	let timeElement = document.getElementById("time-col");
+	timeElement.innerHTML = "Time Left";
 
+	console.log('line 16',currentJobs);
 	addDataToTable(currentJobs);
 }
 
@@ -31,23 +31,48 @@ let showHistory = () => {
 //takes in data which is an array of Job objects
 const addDataToTable = (data) => {
 	let tBody = document.getElementById("table-body");
-	console.log(tBody);
 	let html = "";
+
 	for (let i = 0; i < data.length; i++) {
 		let currentJob = data[i];
 
+
+		// TODO: calculate the time of the job
+		let date = new Date(currentJob.endTime);
+		console.log(date);
 		html += "<tr>" +
-					"<th>" + currentJob.name + "</th>" +
+					"<th>" + currentJob.requestName + "</th>" +
 					"<td>" + currentJob.quality + "</td>" +
 					"<td>" + currentJob.security + "</td>" +
 					"<td>" + currentJob.backup + "</td>" +
-					"<td>" + currentJob.time + "</td>" +
-					"<td>" + currentJob.location + "</td>" +
+					"<td>" + currentJob.endTime + "</td>" +
+					"<td>" + currentJob.allocation + "</td>" +
 			"</tr>"
 	}
 
 	tBody.innerHTML = html;
 }
 
-//when page start show current running jobs
-window.onload = showCurrentJobs;
+
+//all functionality that needs to fire on start goes here
+const onMount = () => {
+
+	fetch('http://pcvm1-11.lan.sdn.uky.edu:3000/')
+		.then(response => {
+			return response.json();
+		})
+		.then(myJson => {
+			currentJobs = myJson.activeJobs;
+			console.log('line 66', currentJobs);
+			jobHistory = myJson.completedJobs;
+			showCurrentJobs();
+		});
+}
+
+window.onload = onMount;
+
+
+
+
+
+
