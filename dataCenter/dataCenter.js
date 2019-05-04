@@ -11,11 +11,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 const port = process.env.PORT || 3000;
 
-const resources = require('./resources');
-
-let remainingResources = resources;
-
-
 //this is express http request http post request can have information
 app.post('/dc1', (req,res) => {
 	//the body could contain the a file or simply json of the
@@ -30,7 +25,7 @@ app.post('/dc1', (req,res) => {
 	res.json(JSON.stringify('POST Received'));
 
 	//make a file
-	// fs.writeFile('remainingResources.json', JSON.stringify(remainingResources), (err) => {
+	// fs.writeFile('./dataCenter/active-datacenter-jobs.json', JSON.stringify(remainingResources), (err) => {
 	// 	if (err) throw err;
 	// 	console.log('The file has been saved');
 	// });

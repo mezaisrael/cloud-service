@@ -1,17 +1,20 @@
 {
-  "name": "test",
+  "name": "hunter-csci-honest-urb",
   "version": "1.0.0",
-  "description": "draft dataCenterResources",
-  "main": "dataCenter.js",
+  "description": "CSCI Cloud Database Security Project",
+  "main": "dataCenter/dataCenter.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dataCenter.js"
+    "datacenter": "node ./dataCenter/dataCenter.js",
+    "urb": "node ./urbService/urbService.js",
+    "urb-debug": "node --inspect ./urbService/urbService.js"
   },
   "author": "Israel",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "moment": "^2.24.0"
   }
 }
