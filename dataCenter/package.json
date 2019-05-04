@@ -1,0 +1,20 @@
+{
+  "name": "dataCenter",
+  "version": "1.0.0",
+  "description": "first dataCenter draft",
+  "main": "dataCenter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dataCenter.js"
+  },
+  "author": "Rich",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "jquery": "^3.4.0",
+    "jsdom": "^15.0.0"
+  }
+}
