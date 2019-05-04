@@ -5,9 +5,10 @@ const fs = require('fs');
 const cors = require('cors');
 const cheerio = require('cheerio');
 
+
 var http = require('http').Server(app);
 var io = require("socket.io").listen(http);
-
+var moment = require('moment');
 
 io.sockets.on('connection',function (socket){
   console.log("connection");
@@ -78,8 +79,9 @@ app.post('/dc1', (req,res) => {
     }
 
     if(i == 4){
-      var formattedTime = formatTime(currentJobPart);
-      $('<th class="currentJobTime">' + formatTime(currentJobPart) + '</th>').appendTo('.table-body');
+      var formattedTime = moment.unix(currentJobPart).diff(moment(), 's') + ' seconds left';
+
+      $('<th class="currentJobTime">' + formattedTime + '</th>').appendTo('.table-body');
       $('</tr>').appendTo('.table-body');
       console.log('inserted JobTime');
     }
@@ -100,14 +102,6 @@ var json = JSON.stringify({
 
 });
 
-function formatTime(time){
-  var date = new Date(time*1000);
-  var hours = date.getHours();
-  var minutes = "0" + date.getMinutes();
-  var seconds = "0" + date.getSeconds();
-  var formatted = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-  return formatted;
-}
 
 app.get('/', (req,res) => {
 	res.send('this is the home page');
