@@ -1,4 +1,3 @@
-
 let currentJobs = [
 	new Job("cern", true,false, true, "32hr", "123.543.23.34"),
 
@@ -38,14 +37,14 @@ const addDataToTable = (data) => {
 
 
 		// TODO: calculate the time of the job
-		let date = new Date(currentJob.endTime);
+		let date = new moment.unix(currentJob.endTime).format('MMMM Do YYYY, h:mm:ss a');
 		console.log(date);
 		html += "<tr>" +
 					"<th>" + currentJob.requestName + "</th>" +
 					"<td>" + currentJob.quality + "</td>" +
 					"<td>" + currentJob.security + "</td>" +
 					"<td>" + currentJob.backup + "</td>" +
-					"<td>" + currentJob.endTime + "</td>" +
+					"<td>" + date + "</td>" +
 					"<td>" + currentJob.allocation + "</td>" +
 			"</tr>"
 	}
