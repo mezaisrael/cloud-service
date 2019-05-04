@@ -1,3 +1,5 @@
+let currentPage = 'active';
+
 let currentJobs = [
 	new Job("cern", true,false, true, "32hr", "123.543.23.34"),
 
@@ -8,17 +10,17 @@ let jobHistory = [
 ];
 
 let showCurrentJobs = () => {
-	console.log('showing curretn jobs');
+	currentPage = 'active';
 	//change the time label
 	let timeElement = document.getElementById("time-col");
 	timeElement.innerHTML = "Time Left";
 
-	console.log('line 16',currentJobs);
 	addDataToTable(currentJobs);
 }
 
 
 let showHistory = () => {
+	currentPage = 'history';
 	//change the time label
 	let time = document.getElementById("time-col");
 	time.innerHTML = "End Time";
@@ -37,14 +39,13 @@ const addDataToTable = (data) => {
 
 
 		// TODO: calculate the time of the job
-		let date = new moment.unix(currentJob.endTime).format('MMMM Do YYYY, h:mm:ss a');
-		console.log(date);
+		let timeLeft = moment.unix(currentJob.endTime).diff(moment(), 's');
 		html += "<tr>" +
 					"<th>" + currentJob.requestName + "</th>" +
 					"<td>" + currentJob.quality + "</td>" +
 					"<td>" + currentJob.security + "</td>" +
 					"<td>" + currentJob.backup + "</td>" +
-					"<td>" + date + "</td>" +
+					"<td>" + timeLeft + " seconds left </td>" +
 					"<td>" + currentJob.allocation + "</td>" +
 			"</tr>"
 	}
@@ -55,17 +56,19 @@ const addDataToTable = (data) => {
 
 //all functionality that needs to fire on start goes here
 const onMount = () => {
-
 	fetch('http://pcvm1-11.lan.sdn.uky.edu:3000/')
 		.then(response => {
 			return response.json();
 		})
 		.then(myJson => {
 			currentJobs = myJson.activeJobs;
-			console.log('line 66', currentJobs);
 			jobHistory = myJson.completedJobs;
 			showCurrentJobs();
 		});
+
+	setInterval(() => {
+		currentPage === 'active' ? showCurrentJobs() : showHistory();
+	}, 500);
 }
 
 window.onload = onMount;
