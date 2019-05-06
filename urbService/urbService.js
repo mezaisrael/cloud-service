@@ -18,6 +18,10 @@ const port = process.env.PORT || 3000;
 var activeJobs = require('./active-jobs');
 var completedJobs = require('./completed-jobs');
 
+// Mock jobs for dev. Uncomment to return mock jobs.
+// activeJobs = require('./mock-active-jobs');
+// completedJobs = require('./mock-completed-jobs');
+
 /*
     Startup Process
  */
@@ -37,6 +41,7 @@ let transferFromActiveJobs = activeJobs.reduce((acc, job) => {
     const endMoment = moment.unix(job.endTime);
     // If current moment is greater than the end moment of the job, the job had passed.
     if (moment().diff(endMoment) > 0) {
+        // TODO: Add callback to terminate jobs during startup.
         acc.push(job);
     }
 
@@ -77,9 +82,6 @@ io.on('connection', (socket) => {
     console.log('[SOCKET.IO] Connection established');
 });
 
-// Mock jobs for dev. Uncomment to return mock jobs.
-// activeJobs = require('./mock-active-jobs');
-// completedJobs = require('./mock-completed-jobs');
 
 // Query all jobs that are currently active or have been completed.
 app.get('/', (req,res) => {
@@ -103,6 +105,14 @@ domains.map(domain => {
         });
         res.end(JSON.stringify(domainJobs));
     })
+})
+
+// Endpoint to kill request
+app.post('/kill', (req, res) => {
+    console.log('[EVENT] Kill order for job ID:', req.body.id);
+    terminateJob(req.body.id);
+    console.log(`[SOCKET.IO] Emitting update. Job id killed: ${req.body.id}`);
+    io.emit('job-update', JSON.stringify({activeJobs, completedJobs}));
 })
 
 // Handle request for new job
@@ -185,10 +195,15 @@ app.post('/request', (req, res) => {
             io.emit('job-update', JSON.stringify({activeJobs, completedJobs}));
         }, jobRunTimeMs);
         // TODO: Send proper response.
-        res.send('Job Queued!');
+        res.send({ id, allocation });
     } else {
-        // TODO: Write queue system
+        maxId++;
+        const id = maxId;
+        console.log(`[EVENT] Assigning request[${req.body.requestName}] - ${allocation}`);
+        activeJobs.push({...req.body, id, allocation});
+        writeActiveJobs();
         console.log(`[LOG] Queued job: ${req.body.requestName}`);
+        res.send({ id, allocation });
     }
 })
 
