@@ -1,0 +1,10 @@
+{
+  "urb": "pcvm2-15.lan.sdn.uky.edu",
+  "dashboard": "pcvm3-12.lan.sdn.uky.edu",
+  "east1": "pcvm1-3.lan.sdn.uky.edu",
+  "east2": "pcvm2-12.lan.sdn.uky.edu",
+  "north1": "pcvm5-5.lan.sdn.uky.edu",
+  "north2": "pcvm5-7.lan.sdn.uky.edu",
+  "west1": "pcvm3-13.lan.sdn.uky.edu",
+  "west2": "pcvm1-5.lan.sdn.uky.edu"
+}

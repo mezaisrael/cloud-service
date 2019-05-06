@@ -87,13 +87,13 @@ app.post('/dc1', (req,res) => {
     }
 
     $.html(); //
-//    console.log($('.table-body').contents() + 'test');
+    // console.log($('.table-body').contents() + 'test');
     }
 
-var json = JSON.stringify({
-  location: "DataCenter1",
-  message: "POST Recieved"
-})
+  var json = JSON.stringify({
+    location: "DataCenter1",
+    message: "POST Recieved"
+  })
 
   //Respond back to URB
 	res.end(json);

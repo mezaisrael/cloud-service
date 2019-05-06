@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const bodyParser =require('body-parser');
+const server = require('http').createServer(app);
+const bodyParser = require('body-parser');
 const fs = require('fs');
 const cors = require('cors');
 const moment = require('moment');
@@ -110,7 +111,7 @@ app.post('/request', (req, res) => {
     * */
 
     const { quality, security } = req.body;
-    let allocation = 'east1';
+    let allocation = 'reject';
     // True switch, do not change the order.
     switch (true) {
         case quality && security:
@@ -146,7 +147,7 @@ app.post('/request', (req, res) => {
     }
 })
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log('=== URB Service Started ===')
     console.log(`Listening on port ${port}`);
     console.log('Max Id:', maxId);
