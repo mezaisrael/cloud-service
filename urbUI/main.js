@@ -1,13 +1,15 @@
 let currentPage = 'active';
 
-let currentJobs = [
-	new Job("cern", true,false, true, "32hr", "123.543.23.34"),
+let currentJobs = [];
 
-];
+let jobHistory = [];
 
-let jobHistory = [
-	new Job("nasa", true,true, true, "12:00", "127.12.123.123")
-];
+var socket = io('http://localhost:3000');
+socket.on('job-update', (update) => {
+	const data = JSON.parse(update);
+	currentJobs = data.activeJobs;
+	jobHistory = data.completedJobs;
+})
 
 let showCurrentJobs = () => {
 	currentPage = 'active';
@@ -58,7 +60,8 @@ const addDataToTable = (data) => {
 
 //all functionality that needs to fire on start goes here
 const onMount = () => {
-	fetch('http://pcvm1-11.lan.sdn.uky.edu:3000/')
+	// fetch('http://pcvm1-11.lan.sdn.uky.edu:3000/')
+	fetch('http://localhost:3000')
 		.then(response => {
 			return response.json();
 		})
@@ -70,7 +73,7 @@ const onMount = () => {
 
 	setInterval(() => {
 		currentPage === 'active' ? showCurrentJobs() : showHistory();
-	}, 500);
+	}, 100);
 }
 
 window.onload = onMount;

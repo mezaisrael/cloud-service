@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const cors = require('cors');
 const moment = require('moment');
+const io = require('socket.io')(server);
 
 app.use(cors())
 
@@ -67,9 +68,18 @@ fs.writeFile('./urbService/completed-jobs.json', JSON.stringify(completedJobs.co
     End Startup Process
  */
 
+
+/*
+    Socket.IO
+ */
+
+io.on('connection', (socket) => {
+    console.log('[SOCKET.IO] Connection established');
+});
+
 // Mock jobs for dev. Uncomment to return mock jobs.
-activeJobs = require('./mock-active-jobs');
-completedJobs = require('./mock-completed-jobs');
+// activeJobs = require('./mock-active-jobs');
+// completedJobs = require('./mock-completed-jobs');
 
 // Query all jobs that are currently active or have been completed.
 app.get('/', (req,res) => {
@@ -98,8 +108,8 @@ domains.map(domain => {
 // Handle request for new job
 app.post('/request', (req, res) => {
     // Disable for now. Comment below if need to test for development purpose.
-    res.send('/request - API not available at the moment...')
-    return;
+    // res.send('/request - API not available at the moment...')
+    // return;
 
 
     // Determine allocation
@@ -131,15 +141,19 @@ app.post('/request', (req, res) => {
     }
     if (allocation !== 'reject') {
         maxId++;
+        const id = maxId;
         console.log(`[EVENT] Assigning request[${req.body.requestName}] to ${allocation}`);
-        activeJobs.push({...req.body, id: maxId, allocation});
+        activeJobs.push({...req.body, id, allocation});
         writeActiveJobs();
 
         // Create callback to terminate job and move from active to completed list.
         const jobRunTimeMs = moment.unix(req.body.endTime).diff(moment(), 'ms');
         setTimeout(() => {
-            terminateJob(maxId);
-            console.log('[EVENT] Terminating job id: ', maxId);
+            terminateJob(id);
+            console.log('[EVENT] Terminating job id: ', id);
+            console.log('[SOCKET.IO] Emitting update.');
+
+            io.emit('job-update', JSON.stringify({activeJobs, completedJobs}));
         }, jobRunTimeMs);
         res.send('Job Queued!');
     } else {
@@ -164,6 +178,8 @@ const writeActiveJobs = () => {
     fs.writeFile('./urbService/active-jobs.json', JSON.stringify(activeJobs), (err) => {
         if (err) throw err;
         console.log('[EVENT] active-jobs updated.');
+        console.log('[SOCKET-IO] Emitting active job update');
+        io.emit('job-update', JSON.stringify({activeJobs, completedJobs}));
     });
 }
 
