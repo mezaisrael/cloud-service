@@ -78,7 +78,7 @@ const onMount = () => {
 
 	setInterval(() => {
 		currentPage === 'active' ? showCurrentJobs() : showHistory();
-	}, 100);
+	}, 1000);
 }
 
 window.onload = onMount;
