@@ -114,36 +114,64 @@ app.post('/request', (req, res) => {
 
     // Determine allocation
     /*
-    * (Quality, Security)
-    * (T,F) -> West
-    * (F,T) -> North
-    * (T,T) -> East
+    * Algorithm:
+    * alpha = 0.8;
+    * if security -> alpha += 0.8
+    * if backup -> alpha += 0.4
+    * if quality -> alpha -= 0.2
+    *
+    * score = (duration/10) * alpha
+    *
+    * if score >= 5, [SECURITY]
+    * else if score < 5, [QUALITY]
+    *
+    * west = [QUALITY]
+    * north = [SECURITY]
+    * east = [QUALITY, SECURITY]
     * */
-
     console.log('[LOG] Request Body: ', req.body);
-    const { quality, security } = req.body;
-    let allocation = 'reject';
+    const { quality, security, backup, duration } = req.body;
+
+    let alpha = 0.8;
+    if (!!security) {
+        alpha += 0.8;
+    }
+
+    if (!!backup) {
+        alpha += 0.4;
+    }
+
+    if (!!quality) {
+        alpha -= 0.2;
+    }
+
+    const score = (duration/10) * alpha;
+
+    console.log(`[LOG] Request[${req.body.requestName}] Score: ${score}`);
+    let allocation = 'queued';
     // True switch, do not change the order.
     switch (true) {
-        case quality && security:
-            console.log('[LOG] Quality && Security -> East');
-            allocation = queueJobForDomain('east', req.body.requestName);
-            break;
-        case quality:
-            console.log('[LOG] Quality -> West');
+        case score < 5:
+            console.log('[LOG] Quality -> attempting to allocate to: West');
             allocation = queueJobForDomain('west', req.body.requestName);
             break;
-        case security:
-            console.log('[LOG] Security -> North');
+        default:
+            console.log('[LOG] Security -> attempting to allocate to: North');
             allocation = queueJobForDomain('north', req.body.requestName);
             break;
-        default:
-            break;
     }
-    if (allocation !== 'reject') {
+
+    // If it's still in queue, try to allocate to best domain east that supports both security/quality
+    if (allocation === 'queued') {
+        console.log('[LOG] Security -> attempting to allocate to: East');
+        allocation = queueJobForDomain('east', req.body.requestName);
+    }
+
+
+    if (allocation !== 'queued') {
         maxId++;
         const id = maxId;
-        console.log(`[EVENT] Assigning request[${req.body.requestName}] to ${allocation}`);
+        console.log(`[EVENT] Assigning request[${req.body.requestName}] - ${allocation}`);
         activeJobs.push({...req.body, id, allocation});
         writeActiveJobs();
 
@@ -156,9 +184,11 @@ app.post('/request', (req, res) => {
 
             io.emit('job-update', JSON.stringify({activeJobs, completedJobs}));
         }, jobRunTimeMs);
+        // TODO: Send proper response.
         res.send('Job Queued!');
     } else {
-        console.log(`[LOG] Reject job: ${req.body.requestName}`);
+        // TODO: Write queue system
+        console.log(`[LOG] Queued job: ${req.body.requestName}`);
     }
 })
 
@@ -205,7 +235,7 @@ const terminateJob = (id) => {
     writeCompletedJobs();
 }
 
-// Try to queue to vm1/2 of particular domain. return 'reject' if no space.
+// Try to queue to vm1/2 of particular domain. return 'queued' if no space.
 const queueJobForDomain = (domain, jobName) => {
     // Look for VM1
     const d1 = domain + '1';
@@ -217,6 +247,6 @@ const queueJobForDomain = (domain, jobName) => {
         console.log(`[LOG] Found space in ${domain}2 for job ${jobName}`);
         return d2;
     } else {
-        return 'reject';
+        return 'queued';
     }
 }
