@@ -218,6 +218,8 @@ const writeCompletedJobs = () => {
     fs.writeFile('./urbService/completed-jobs.json', JSON.stringify(completedJobs), (err) => {
         if (err) throw err;
         console.log('[EVENT] completed-jobs updated');
+        console.log('[SOCKET-IO] Emitting completed job update');
+        io.emit('job-update', JSON.stringify({activeJobs, completedJobs}));
     });
 }
 
