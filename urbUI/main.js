@@ -4,7 +4,13 @@ let currentJobs = [];
 
 let jobHistory = [];
 
-var socket = io('http://localhost:3000');
+// Local host for dev work
+// const endPoint = 'http://localhost:3000'
+
+// URB Actual
+const endPoint = 'http://pcvm2-15.lan.sdn.uky.edu:3000'
+
+var socket = io(endPoint);
 socket.on('job-update', (update) => {
 	const data = JSON.parse(update);
 	currentJobs = data.activeJobs;
@@ -60,8 +66,7 @@ const addDataToTable = (data) => {
 
 //all functionality that needs to fire on start goes here
 const onMount = () => {
-	// fetch('http://pcvm1-11.lan.sdn.uky.edu:3000/')
-	fetch('http://localhost:3000')
+	fetch(endPoint)
 		.then(response => {
 			return response.json();
 		})
