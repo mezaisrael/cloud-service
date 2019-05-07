@@ -110,7 +110,7 @@ domains.map(domain => {
 // Endpoint to kill request
 app.post('/kill', (req, res) => {
     console.log('[EVENT] Kill order for job ID:', req.body.id);
-    terminateJob(req.body.id);
+    terminateJob(req.body.id, true);
     console.log(`[SOCKET.IO] Emitting update. Job id killed: ${req.body.id}`);
     io.emit('job-update', JSON.stringify({activeJobs, completedJobs}));
 })
@@ -238,9 +238,12 @@ const writeCompletedJobs = () => {
     });
 }
 
-const terminateJob = (id) => {
+const terminateJob = (id, kill = false) => {
     activeJobs = activeJobs.reduce((acc, job) => {
         if (job.id === id) {
+            if (kill) {
+                job.allocation = 'terminated';
+            }
             completedJobs.push(job);
         } else {
             acc.push(job);
