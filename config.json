@@ -6,5 +6,6 @@
   "north1": "pcvm5-5.lan.sdn.uky.edu",
   "north2": "pcvm5-7.lan.sdn.uky.edu",
   "west1": "pcvm3-13.lan.sdn.uky.edu",
-  "west2": "pcvm1-5.lan.sdn.uky.edu"
+  "west2": "pcvm1-5.lan.sdn.uky.edu",
+  "localhost": "localhost"
 }

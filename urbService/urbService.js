@@ -42,6 +42,14 @@ let transferFromActiveJobs = activeJobs.reduce((acc, job) => {
     // If current moment is greater than the end moment of the job, the job had passed.
     if (moment().diff(endMoment) > 0) {
         // TODO: Add callback to terminate jobs during startup.
+        const jobRunTimeMs = moment().add(job.duration, 's').diff(moment(), 'ms');
+        setTimeout(() => {
+            terminateJob(job.id);
+            console.log('[EVENT] Terminating job id: ', job.id);
+            console.log('[SOCKET.IO] Emitting update.');
+
+            io.emit('job-update', JSON.stringify({activeJobs, completedJobs}));
+        }, jobRunTimeMs);
         acc.push(job);
     }
 
@@ -140,22 +148,7 @@ app.post('/request', (req, res) => {
     * east = [QUALITY, SECURITY]
     * */
     console.log('[LOG] Request Body: ', req.body);
-    const { quality, security, backup, duration } = req.body;
-
-    let alpha = 0.8;
-    if (!!security) {
-        alpha += 0.8;
-    }
-
-    if (!!backup) {
-        alpha += 0.4;
-    }
-
-    if (!!quality) {
-        alpha -= 0.2;
-    }
-
-    const score = (duration/10) * alpha;
+    const score = calculateScore(req.body);
 
     console.log(`[LOG] Request[${req.body.requestName}] Score: ${score}`);
     let allocation = 'queued';
@@ -194,7 +187,6 @@ app.post('/request', (req, res) => {
 
             io.emit('job-update', JSON.stringify({activeJobs, completedJobs}));
         }, jobRunTimeMs);
-        // TODO: Send proper response.
         res.send({ id, allocation });
     } else {
         maxId++;
@@ -202,7 +194,7 @@ app.post('/request', (req, res) => {
         console.log(`[EVENT] Assigning request[${req.body.requestName}] - ${allocation}`);
         activeJobs.push({...req.body, id, allocation});
         writeActiveJobs();
-        console.log(`[LOG] Queued job: ${req.body.requestName}`);
+        console.log(`[LOG] Queued job[${id}]: ${req.body.requestName}`);
         res.send({ id, allocation });
     }
 })
@@ -219,6 +211,23 @@ server.listen(port, () => {
 /*
     Helper Functions
  */
+
+const calculateScore = ({quality, security, backup, duration}) => {
+    let alpha = 0.8;
+    if (!!security) {
+        alpha += 0.8;
+    }
+
+    if (!!backup) {
+        alpha += 0.4;
+    }
+
+    if (!!quality) {
+        alpha -= 0.2;
+    }
+
+    return (duration/10) * alpha;
+}
 
 const writeActiveJobs = () => {
     fs.writeFile('./urbService/active-jobs.json', JSON.stringify(activeJobs), (err) => {
@@ -253,6 +262,8 @@ const terminateJob = (id, kill = false) => {
     }, []);
     writeActiveJobs();
     writeCompletedJobs();
+    // Try to queue next job if there is jobs to in queued.
+    queueNextJob();
 }
 
 // Try to queue to vm1/2 of particular domain. return 'queued' if no space.
@@ -269,4 +280,61 @@ const queueJobForDomain = (domain, jobName) => {
     } else {
         return 'queued';
     }
+}
+
+const queueNextJob = () => {
+    const queueableJobs = activeJobs.reduce((acc, job) => {
+        if(job.allocation === 'queued') {
+            acc.push(job);
+        }
+        return acc;
+    }, []);
+
+    if (queueableJobs.length === 0) {
+        return;
+    }
+
+    queueableJobs.forEach(j => {
+        const score = calculateScore(j);
+        console.log(`[LOG] Scheduling queued job id: ${j.id} - Score: ${score}`);
+        let allocation = 'queued';
+        // True switch, do not change the order.
+        switch (true) {
+            case score < 5:
+                console.log('[LOG] Quality -> attempting to allocate to: West');
+                allocation = queueJobForDomain('west', j.requestName);
+                break;
+            default:
+                console.log('[LOG] Security -> attempting to allocate to: North');
+                allocation = queueJobForDomain('north', j.requestName);
+                break;
+        }
+
+        // If it's still in queue, try to allocate to best domain east that supports both security/quality
+        if (allocation === 'queued') {
+            console.log('[LOG] Security -> attempting to allocate to: East');
+            allocation = queueJobForDomain('east', j.requestName);
+        }
+
+        // If we were able to move the job from the queue, write to active and emit event.
+        if (allocation !== 'queued') {
+            console.log(`[EVENT] Assigning request[${j.id} - ${j.requestName}] - ${allocation}`);
+            activeJobs.map(activeJob => {
+                if(activeJob.id === j.id) {
+                    activeJob.allocation = allocation;
+                    activeJob.endTime = moment().add(j.duration, 's').unix();
+                }
+            });
+            writeActiveJobs();
+
+            const jobRunTimeMs = moment().add(j.duration, 's').diff(moment(), 'ms');
+            setTimeout(() => {
+                terminateJob(j.id);
+                console.log('[EVENT] Terminating job id: ', j.id);
+                console.log('[SOCKET.IO] Emitting update.');
+
+                io.emit('job-update', JSON.stringify({activeJobs, completedJobs}));
+            }, jobRunTimeMs);
+        }
+    })
 }
