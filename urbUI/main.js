@@ -85,7 +85,7 @@ const onMount = () => {
 
 	setInterval(() => {
 		currentPage === 'active' ? showCurrentJobs() : showHistory();
-	}, 1000);
+	}, 300);
 }
 
 const sortDataByDomain = (data) => {
