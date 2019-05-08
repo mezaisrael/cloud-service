@@ -5,16 +5,16 @@ let currentJobs = [];
 let jobHistory = [];
 
 // Local host for dev work
-// const endPoint = 'http://localhost:3000'
+const endPoint = 'http://localhost:3000'
 
 // URB Actual
-const endPoint = 'http://pcvm2-15.lan.sdn.uky.edu:3000'
+// const endPoint = 'http://pcvm2-15.lan.sdn.uky.edu:3000'
 
 var socket = io(endPoint);
 socket.on('job-update', (update) => {
 	const data = JSON.parse(update);
-	currentJobs = data.activeJobs;
-	jobHistory = data.completedJobs;
+	currentJobs = sortDataByDomain(data.activeJobs);
+	jobHistory = sortDataByDomain(data.completedJobs);
 })
 
 let showCurrentJobs = () => {
@@ -45,13 +45,13 @@ const addDataToTable = (data) => {
 	for (let i = 0; i < data.length; i++) {
 		let currentJob = data[i];
 
-
 		// TODO: calculate the time of the job
 		let timeLeft = moment.unix(currentJob.endTime).diff(moment(), 's') + ' seconds left';
 		let timeEnded = moment.unix(currentJob.endTime).format('MMMM Do YYYY, h:mm:ss a');
 		const timeDisplay = currentPage === 'active' ? timeLeft : timeEnded;
 		html += "<tr>" +
-					"<th>" + currentJob.requestName + "</th>" +
+					"<th>" + currentJob.id + "</th>" +
+					"<td>" + currentJob.requestName + "</td>" +
 					"<td>" + currentJob.quality + "</td>" +
 					"<td>" + currentJob.security + "</td>" +
 					"<td>" + currentJob.backup + "</td>" +
@@ -79,6 +79,30 @@ const onMount = () => {
 	setInterval(() => {
 		currentPage === 'active' ? showCurrentJobs() : showHistory();
 	}, 1000);
+}
+
+const sortDataByDomain = (data) => {
+	let west = [];
+	let north = [];
+	let east = [];
+	let queue = [];
+	let terminated = [];
+	//im only checking the first letter for simplicity
+	data.forEach( job => {
+		if (job.allocation[0] === 'w') {
+			west.push(job);
+		} else if (job.allocation[0] === 'n') {
+			north.push(job);
+		} else if (job.allocation[0] === 'e') {
+			east.push(job);
+		} else if (job.allocation === 'queued'){
+			queue.push(job);
+		} else if (job.allocation === 'terminated') {
+			terminated.push(job);
+		}
+	});
+
+	return (west.concat(north).concat(east).concat(queue).concat(terminated));
 }
 
 window.onload = onMount;
