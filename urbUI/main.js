@@ -53,7 +53,8 @@ const addDataToTable = (data) => {
 		if (currentJob.allocation === 'queued') {
 			timeDisplay = currentJob.duration;
 		}
-		html += "<tr>" +
+		const rowClassName = i%2===1 ? 'alt' : '';
+		html += "<tr class=\""+ rowClassName +"\">" +
 					"<th>" + currentJob.id + "</th>" +
 					"<td>" + currentJob.requestName + "</td>" +
 					"<td>" + currentJob.quality + "</td>" +

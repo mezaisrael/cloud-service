@@ -42,6 +42,10 @@ th, td {
 	height: 40px;
 }
 
+tr.alt td {
+	background: #e2e2e2;
+}
+
 .buttons {
 	display: flex;
 	flex-wrap: wrap;
