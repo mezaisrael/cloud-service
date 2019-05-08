@@ -14,6 +14,10 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 const port = process.env.PORT || 3000;
 
+// Layer 3 if < 1200
+// Layer 2 if >= 1200
+const BANDWIDTH_THRESHOLD = 1200;
+
 // Keep var for global scoping.
 var activeJobs = require('./active-jobs');
 var completedJobs = require('./completed-jobs');
@@ -125,11 +129,6 @@ app.post('/kill', (req, res) => {
 
 // Handle request for new job
 app.post('/request', (req, res) => {
-    // Disable for now. Comment below if need to test for development purpose.
-    // res.send('/request - API not available at the moment...')
-    // return;
-
-
     // Determine allocation
     /*
     * Algorithm:
@@ -140,6 +139,8 @@ app.post('/request', (req, res) => {
     *
     * score = (duration/10) * alpha
     *
+    * if layer 3 score+= 0.75
+    *
     * if score >= 5, [SECURITY]
     * else if score < 5, [QUALITY]
     *
@@ -148,7 +149,13 @@ app.post('/request', (req, res) => {
     * east = [QUALITY, SECURITY]
     * */
     console.log('[LOG] Request Body: ', req.body);
-    const score = calculateScore(req.body);
+    let score = calculateScore(req.body);
+
+    const layer = req.body.bandwidth >= BANDWIDTH_THRESHOLD ? 2 : 3;
+
+    if (layer === 3) {
+        score+= 0.75;
+    }
 
     console.log(`[LOG] Request[${req.body.requestName}] Score: ${score}`);
     let allocation = 'queued';
@@ -175,7 +182,7 @@ app.post('/request', (req, res) => {
         maxId++;
         const id = maxId;
         console.log(`[EVENT] Assigning request[${req.body.requestName}] - ${allocation}`);
-        activeJobs.push({...req.body, id, allocation});
+        activeJobs.push({...req.body, id, allocation, layer});
         writeActiveJobs();
 
         // Create callback to terminate job and move from active to completed list.
@@ -187,15 +194,15 @@ app.post('/request', (req, res) => {
 
             io.emit('job-update', JSON.stringify({activeJobs, completedJobs}));
         }, jobRunTimeMs);
-        res.send({ id, allocation });
+        res.send({ id, allocation, layer });
     } else {
         maxId++;
         const id = maxId;
-        console.log(`[EVENT] Assigning request[${req.body.requestName}] - ${allocation}`);
-        activeJobs.push({...req.body, id, allocation});
+        console.log(`[EVENT] Queuing request[${req.body.requestName}] - ${allocation}`);
+        activeJobs.push({...req.body, id, allocation, layer});
         writeActiveJobs();
         console.log(`[LOG] Queued job[${id}]: ${req.body.requestName}`);
-        res.send({ id, allocation });
+        res.send({ id, allocation, layer });
     }
 })
 

@@ -6,7 +6,8 @@
     "security": true,
     "backup": true,
     "endTime": 1558746061,
-    "allocation": "north2"
+    "allocation": "north2",
+    "layer": 2
   },
   {
     "id": 3,
@@ -15,7 +16,8 @@
     "security": true,
     "backup": false,
     "endTime": 1558946061,
-    "allocation": "west1"
+    "allocation": "west1",
+    "layer": 3
   },
   {
     "id": 4,
@@ -24,7 +26,9 @@
     "security": false,
     "backup": false,
     "endTime": 1558326061,
-    "allocation": "west2"
+    "allocation": "west2",
+    "bandwidth": "500",
+    "layer": 3
   },
   {
     "id": 5,
@@ -33,7 +37,9 @@
     "security": true,
     "backup": false,
     "endTime": 1558216061,
-    "allocation": "east2"
+    "allocation": "east2",
+    "bandwidth": "1500",
+    "layer": 2
   },
   {
     "id": 9,
@@ -42,7 +48,9 @@
     "security": true,
     "backup": false,
     "endTime": 1559116061,
-    "allocation": "east1"
+    "allocation": "east1",
+    "bandwidth": "2000",
+    "layer": 2
   },
   {
     "id": 10,
@@ -51,6 +59,8 @@
     "security": true,
     "backup": true,
     "endTime": 1558336061,
-    "allocation": "north1"
+    "allocation": "north1",
+    "bandwidth": "700",
+    "layer": 3
   }
 ]

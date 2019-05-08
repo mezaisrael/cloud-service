@@ -6,7 +6,9 @@
     "security": true,
     "backup": true,
     "endTime": 1556712061,
-    "allocation": "east1"
+    "allocation": "east1",
+    "bandwidth": "1500",
+    "layer": 2
   },
   {
     "id": 7,
@@ -15,7 +17,9 @@
     "security": true,
     "backup": true,
     "endTime": 1553712061,
-    "allocation": "west1"
+    "allocation": "west1",
+    "bandwidth": "1500",
+    "layer": 2
   },
   {
     "id": 8,
@@ -24,7 +28,9 @@
     "security": false,
     "backup": false,
     "endTime": 1555112061,
-    "allocation": "north2"
+    "allocation": "north2",
+    "bandwidth": "1700",
+    "layer": 2
   },
   {
     "id": 12,
@@ -33,6 +39,8 @@
     "security": false,
     "backup": false,
     "endTime": 1554112061,
-    "allocation": "north2"
+    "allocation": "north2",
+    "bandwidth": "700",
+    "layer": 3
   }
 ]

@@ -5,10 +5,10 @@ let currentJobs = [];
 let jobHistory = [];
 
 // Local host for dev work
-const endPoint = 'http://localhost:3000'
+// const endPoint = 'http://localhost:3000';
 
 // URB Actual
-// const endPoint = 'http://pcvm2-15.lan.sdn.uky.edu:3000'
+const endPoint = 'http://pcvm2-15.lan.sdn.uky.edu:3000';
 
 var socket = io(endPoint);
 socket.on('job-update', (update) => {
@@ -45,10 +45,12 @@ const addDataToTable = (data) => {
 	for (let i = 0; i < data.length; i++) {
 		let currentJob = data[i];
 
-		// TODO: calculate the time of the job
-		let timeLeft = moment.unix(currentJob.endTime).diff(moment(), 's') + ' seconds left';
+		let timeLeft = moment.unix(currentJob.endTime).diff(moment(), 's');
 		let timeEnded = moment.unix(currentJob.endTime).format('MMMM Do YYYY, h:mm:ss a');
-		const timeDisplay = currentPage === 'active' ? timeLeft : timeEnded;
+		let timeDisplay = currentPage === 'active' ? timeLeft : timeEnded;
+		if (currentJob.allocation === 'queued') {
+			timeDisplay = currentJob.duration;
+		}
 		html += "<tr>" +
 					"<th>" + currentJob.id + "</th>" +
 					"<td>" + currentJob.requestName + "</td>" +
@@ -56,7 +58,8 @@ const addDataToTable = (data) => {
 					"<td>" + currentJob.security + "</td>" +
 					"<td>" + currentJob.backup + "</td>" +
 					"<td>" + timeDisplay + " </td>" +
-					"<td>" + currentJob.allocation + "</td>" +
+					// TODO: Once IP address are finalized, replace layer text with ip address.
+					"<td>" + currentJob.allocation + " (layer: "+ currentJob.layer + ")</td>" +
 			"</tr>"
 	}
 
@@ -71,7 +74,8 @@ const onMount = () => {
 			return response.json();
 		})
 		.then(myJson => {
-			currentJobs = myJson.activeJobs;
+            console.log('OnMount Res', myJson);
+            currentJobs = myJson.activeJobs;
 			jobHistory = myJson.completedJobs;
 			showCurrentJobs();
 		});
