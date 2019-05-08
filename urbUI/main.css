@@ -52,4 +52,10 @@ button {
 	width: 200px;
 	line-height: 2em;
 	margin: 15px;
+	font-size: 14px;
+}
+
+button.selected {
+	background: #5bb3e6;
+	color: white;
 }

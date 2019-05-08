@@ -22,7 +22,8 @@ let showCurrentJobs = () => {
 	//change the time label
 	let timeElement = document.getElementById("time-col");
 	timeElement.innerHTML = "Time Left";
-
+	document.getElementById('current-jobs').className = "selected"
+    document.getElementById('past-jobs').className = ""
 	addDataToTable(currentJobs);
 }
 
@@ -32,7 +33,8 @@ let showHistory = () => {
 	//change the time label
 	let time = document.getElementById("time-col");
 	time.innerHTML = "End Time";
-
+    document.getElementById('current-jobs').className = ""
+    document.getElementById('past-jobs').className = "selected"
 	addDataToTable(jobHistory);
 }
 
