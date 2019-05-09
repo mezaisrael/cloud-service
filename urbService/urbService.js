@@ -151,7 +151,7 @@ app.post('/request', (req, res) => {
     console.log('[LOG] Request Body: ', req.body);
     let score = calculateScore(req.body);
 
-    const layer = req.body.bandwidth >= BANDWIDTH_THRESHOLD ? 2 : 3;
+    const layer = req.body.fileSize >= BANDWIDTH_THRESHOLD ? 2 : 3;
 
     if (layer === 3) {
         score+= 0.75;
