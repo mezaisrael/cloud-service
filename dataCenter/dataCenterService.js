@@ -9,6 +9,8 @@ const moment = require('moment');
 
 const port = process.env.PORT || 3000;
 
+var intervalHandle;
+
 app.use(cors());
 
 app.use(bodyParser.json());
@@ -40,9 +42,10 @@ function interval(){
   }
 }
 
-setInterval(interval,500); // Wait 1/2 second
+intervalHandle = setInterval(interval,500); // Wait 1/2 second
 
 app.post('/request', (req,res) => {
+    clearInterval(intervalHandle);
 	console.log('Incoming job:', req.body);
 
 	var currentRequest = {
@@ -111,7 +114,8 @@ app.post('/request', (req,res) => {
       if(err) console.log(err);
       console.log("Wrote to file");
   });
-
+    // Restart the interval after file write.
+    intervalHandle = setInterval(interval,500);
 });
 
 app.listen(port, () => console.log(`listening on port ${port}`));
