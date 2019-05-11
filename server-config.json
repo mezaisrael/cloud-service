@@ -1,13 +1,13 @@
 {
   "urb": {
-    "hostname": "",
-    "l3": "",
-    "l2": ""
+    "hostname": "pcvm3-14.instageni.umkc.edu",
+    "l3": "204.76.187.94",
+    "l2": "10.10.12.6"
   },
   "dashboard": {
-    "hostname": "",
-    "l3": "",
-    "l2": ""
+    "hostname": "pcvm1-9.instageni.umkc.edu",
+    "l3": "204.76.187.77",
+    "l2": "n/a"
   },
   "east1": {
     "hostname": "",
@@ -20,14 +20,14 @@
     "l2": ""
   },
   "north1": {
-    "hostname": "",
-    "l3": "",
-    "l2": ""
+    "hostname": "pcvm3-13.instageni.umkc.edu",
+    "l3": "204.76.187.93",
+    "l2": "10.10.10.3"
   },
   "north2": {
-    "hostname": "",
-    "l3": "",
-    "l2": ""
+    "hostname": "pcvm2-24.instageni.umkc.edu",
+    "l3": "204.76.187.89",
+    "l2": "10.10.10.4"
   },
   "west1": {
     "hostname": "",
