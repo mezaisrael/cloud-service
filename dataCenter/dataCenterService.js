@@ -84,10 +84,8 @@ app.post('/request', (req,res) => {
 
         $('<th class="currentJobBackup">' + currentRequest.requestBackup + '</th>').appendTo('.table-body');
         console.log('inserted JobBackup');
-
-        if (!!currentRequest.requestEndTime) {
-            var formattedTime = moment.unix(currentRequest.requestEndTime).diff(moment(), 's') + ' seconds left';
-        }
+        let timeLeft = moment.unix(currentRequest.requestEndTime).diff(moment(), 's');
+        var formattedTime = Number.isNaN(timeLeft) ? '-' : timeLeft + ' seconds left';
 
         $('<th class="currentJobTime">' + formattedTime + '</th>').appendTo('.table-body');
         $('</tr>').appendTo('.table-body');
