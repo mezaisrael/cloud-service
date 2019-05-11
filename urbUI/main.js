@@ -8,7 +8,7 @@ let jobHistory = [];
 // const endPoint = 'http://localhost:3000';
 
 // URB Actual
-const endPoint = 'http://pcvm2-15.lan.sdn.uky.edu:3000';
+const endPoint = 'http://pcvm1-14.instageni.wisc.edu:3000';
 
 var socket = io(endPoint);
 socket.on('job-update', (update) => {
