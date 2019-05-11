@@ -27,8 +27,7 @@ function interval(){
   //Check if job has finished
   if(moment.unix(runningJobContent.requestEndTime).isBefore(moment())){
 
-    const newTimeRemaining = $('<th class="currentJobTime"> Finished: '
-      + moment(runningJobContent.requestEndTime).format('MMMM Do YYYY, h:mm:ss a') + '</th>')
+    const newTimeRemaining = $('<th class="currentJobTime"> Job Finished </th>')
     $('.currentJobTime').replaceWith(newTimeRemaining)
     $.html()
     fs.writeFileSync('./dataCenter/index.html',$.html()); // Update html file with new time
