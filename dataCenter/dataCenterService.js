@@ -5,20 +5,9 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const cors = require('cors');
 const cheerio = require('cheerio');
-const io = require('socket.io')(server);
 const moment = require('moment');
 
 const port = process.env.PORT || 3000;
-
-// URB Actual
-const endPoint = 'http://128.163.232.78:3000';
-
-io.on('job-update', (update) => {
-    console.log("new job update");
-  	const data = JSON.parse(update);
-  	currentJobs = sortDataByDomain(data.activeJobs);
-  	jobHistory = sortDataByDomain(data.completedJobs);
-  })
 
 app.use(cors());
 
@@ -32,8 +21,6 @@ function interval(){
   var runningJobContent = JSON.parse(runningJob);
 
   var formattedTime = moment.unix(runningJobContent.requestEndTime).diff(moment(), 's') + ' seconds left';
-  //console.log(formattedTime);
-
 
   //Check if job has finished
   if(moment.unix(runningJobContent.requestEndTime).isBefore(moment())){
@@ -51,11 +38,9 @@ function interval(){
   }
 }
 
-  setInterval(interval,1000); // Wait 1 second
-//this is express http request http post request can have information
+  setInterval(interval,500); // Wait 1/2 second
+
 app.post('/request', (req,res) => {
-	//the body could contain the a file or simply json of the
-	//resources needed
   console.log(req.hostname);
   console.log(req.port);
 	console.log(req.body);
@@ -125,11 +110,6 @@ $.html()
     console.log("Wrote to file");
   });
 
-});
-
-
-app.get('/', (req,res) => {
-	res.send('this is the home page');
 });
 
 app.listen(port, () => console.log(`listening on port ${port}`));
