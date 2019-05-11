@@ -82,8 +82,8 @@ app.post('/request', (req,res) => {
 
         $('<th class="currentJobBackup">' + currentRequest.requestBackup + '</th>').appendTo('.table-body');
         console.log('inserted JobBackup');
-
-        var formattedTime = moment.unix(currentRequest.requestEndTime).diff(moment(), 's') + ' seconds left';
+        let timeLeft = moment.unix(currentRequest.requestEndTime).diff(moment(), 's');
+        var formattedTime = Number.isNaN(timeLeft) ? '-' : timeLeft + ' seconds left';
 
         $('<th class="currentJobTime">' + formattedTime + '</th>').appendTo('.table-body');
         $('</tr>').appendTo('.table-body');
@@ -103,8 +103,8 @@ app.post('/request', (req,res) => {
     //Respond back to URB
     res.end(json);
 
-
     fs.writeFileSync('./dataCenter/index.html',$.html()); // Update html file with new html data
+
     fs.writeFile('./dataCenter/currentJob.json', JSON.stringify(currentRequest), (err) => {
       if(err) console.log(err);
       console.log("Wrote to file");
