@@ -191,8 +191,9 @@ app.post('/request', (req, res) => {
 
         // TODO: Post to proper job server
         const serverInfo = getServerInfo(allocation);
-        console.log(`[EVENT] Posting job ${id} - ${req.body.requestName} to ${allocation} @ ${serverInfo.hostname}`);
-        fetch(`http://${serverInfo.hostname}:3000/request`, {
+        const postTarget = layer === 2 ? serverInfo.l2 : serverInfo.l3;
+        console.log(`[EVENT] Posting job ${id} - ${req.body.requestName} to ${allocation} @ ${serverInfo.hostname} - layer: ${layer} - ip: ${postTarget}`);
+        fetch(`http://${postTarget}:3000/request`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
