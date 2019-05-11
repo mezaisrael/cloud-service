@@ -50,6 +50,29 @@ const serverConfig = {
     }
 };
 
+const getServerInfo = (s) => {
+    switch (s) {
+        case 'east1':
+            return serverConfig.east1;
+        case 'east2':
+            return serverConfig.east2;
+        case 'west1':
+            return serverConfig.west1;
+        case 'west2':
+            return serverConfig.west2;
+        case 'north1':
+            return serverConfig.north1;
+        case 'north2':
+            return serverConfig.north2;
+        case 'urb':
+            return serverConfig.urb;
+        case 'dashboard':
+            return serverConfig.dashboard;
+        default:
+            return serverConfig.localhost;
+    }
+}
+
 // Local host for dev work
 // const endPoint = 'http://localhost:3000';
 
@@ -85,6 +108,10 @@ let showHistory = () => {
 }
 
 
+let redirectToDataCenter = (e) => {
+
+}
+
 //takes in data which is an array of Job objects
 const addDataToTable = (data) => {
 	let tBody = document.getElementById("table-body");
@@ -99,8 +126,9 @@ const addDataToTable = (data) => {
 		if (currentJob.allocation === 'queued') {
 			timeDisplay = currentJob.duration;
 		}
+        const serverInfo = getServerInfo(currentJob.allocation);
 		const rowClassName = i%2===1 ? 'alt' : '';
-		html += "<tr class=\""+ rowClassName +"\">" +
+		html += "<tr onclick='redirectToDataCenter(currentJob.allocation)' class=\""+ rowClassName +"\">" +
 					"<th>" + currentJob.id + "</th>" +
 					"<td>" + currentJob.requestName + "</td>" +
 					"<td>" + currentJob.quality + "</td>" +
@@ -108,12 +136,15 @@ const addDataToTable = (data) => {
 					"<td>" + currentJob.backup + "</td>" +
 					"<td>" + timeDisplay + " </td>" +
 					// TODO: Once IP address are finalized, replace layer text with ip address.
-					"<td>" + currentJob.allocation + " (layer: "+ currentJob.layer + ")</td>" +
+					"<td><a href='http://"+serverInfo.hostname+"/cloud-service/dataCenter' target=\"_blank\">"
+			+ currentJob.allocation + " (layer: "+ currentJob.layer + ")" +
+			"</a></td>" +
 			"</tr>"
 	}
 
 	tBody.innerHTML = html;
 }
+
 
 
 //all functionality that needs to fire on start goes here
