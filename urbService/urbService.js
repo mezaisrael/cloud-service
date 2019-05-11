@@ -8,6 +8,10 @@ const moment = require('moment');
 const io = require('socket.io')(server);
 const fetch = require('node-fetch');
 
+const serverConfig = require('../server-config');
+
+console.log('Servers loaded:', serverConfig);
+
 app.use(cors());
 
 app.use(bodyParser.json());
@@ -46,7 +50,6 @@ let transferFromActiveJobs = activeJobs.reduce((acc, job) => {
     const endMoment = moment.unix(job.endTime);
     // If current moment is greater than the end moment of the job, the job had passed.
     if (moment().diff(endMoment) > 0) {
-        // TODO: Add callback to terminate jobs during startup.
         const jobRunTimeMs = moment().add(job.duration, 's').diff(moment(), 'ms');
         setTimeout(() => {
             terminateJob(job.id);
@@ -187,7 +190,9 @@ app.post('/request', (req, res) => {
         writeActiveJobs();
 
         // TODO: Post to proper job server
-        fetch(`http://localhost:3000/request`, {
+        const serverInfo = getServerInfo(allocation);
+        console.log(`[EVENT] Posting job ${id} - ${req.body.requestName} to ${allocation} @ ${serverInfo.hostname}`);
+        fetch(`http://${serverInfo.hostname}:3000/request`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -229,6 +234,29 @@ server.listen(port, () => {
 /*
     Helper Functions
  */
+
+const getServerInfo = (s) => {
+    switch (s) {
+        case 'east1':
+            return serverConfig.east1;
+        case 'east2':
+            return serverConfig.east2;
+        case 'west1':
+            return serverConfig.west1;
+        case 'west2':
+            return serverConfig.west2;
+        case 'north1':
+            return serverConfig.north1;
+        case 'north2':
+            return serverConfig.north2;
+        case 'urb':
+            return serverConfig.urb;
+        case 'dashboard':
+            return serverConfig.dashboard;
+        default:
+            return serverConfig.localhost;
+    }
+}
 
 const calculateScore = ({quality, security, backup, duration}) => {
     let alpha = 0.8;

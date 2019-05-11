@@ -1,47 +1,45 @@
-[
-  {
-    "urb": {
-      "hostname": "pcvm1-14.instageni.wisc.edu",
-      "l3": "128.104.159.143",
-      "l2": "10.10.12.6"
-    },
-    "dashboard": {
-      "hostname": "pcvm2-2.instageni.wisc.edu",
-      "l3": "128.104.159.149",
-      "l2": "10.10.12.4"
-    },
-    "east1": {
-      "hostname": "pcvm1-9.instageni.wisc.edu",
-      "l3": "128.104.159.133",
-      "l2": "10.10.12.1"
-    },
-    "east2": {
-      "hostname": "pcvm1-10.instageni.wisc.edu",
-      "l3": "128.104.159.134",
-      "l2": "10.10.12.2"
-    },
-    "north1": {
-      "hostname": "pcvm2-6.instageni.wisc.edu",
-      "l3": "128.104.159.153",
-      "l2": "10.10.10.3"
-    },
-    "north2": {
-      "hostname": "pcvm1-12.instageni.wisc.edu",
-      "l3": "128.104.159.139",
-      "l2": "10.10.10.4"
-    },
-    "west1": {
-      "hostname": "pcvm3-24.instageni.wisc.edu",
-      "l3": "128.104.159.160",
-      "l2": "10.10.11.1"
-    },
-    "west2": {
-      "hostname": "pcvm1-15.instageni.wisc.edu",
-      "l3": "128.104.159.148",
-      "l2": "10.10.11.2"
-    },
-    "localhost": {
-      "hostname": "localhost"
-    }
+{
+  "urb": {
+    "hostname": "pcvm2-15.lan.sdn.uky.edu",
+    "l3": "128.163.232.78",
+    "l2": "10.10.4.6"
+  },
+  "dashboard": {
+    "hostname": "pcvm3-12.lan.sdn.uky.edu",
+    "l3": "128.163.232.80",
+    "l2": "10.10.10.23"
+  },
+  "east1": {
+    "hostname": "pcvm1-3.lan.sdn.uky.edu",
+    "l3": "128.163.232.69",
+    "l2": "10.10.10.20"
+  },
+  "east2": {
+    "hostname": "pcvm2-12.lan.sdn.uky.edu",
+    "l3": "128.163.232.75",
+    "l2": "10.10.10.21"
+  },
+  "north1": {
+    "hostname": "pcvm5-5.lan.sdn.uky.edu",
+    "l3": "128.163.232.86",
+    "l2": "10.10.2.3"
+  },
+  "north2": {
+    "hostname": "pcvm5-7.lan.sdn.uky.edu",
+    "l3": "128.163.232.88",
+    "l2": "10.10.2.4"
+  },
+  "west1": {
+    "hostname": "pcvm3-13.lan.sdn.uky.edu",
+    "l3": "128.163.232.81",
+    "l2": "10.10.1.1"
+  },
+  "west2": {
+    "hostname": "pcvm1-5.lan.sdn.uky.edu",
+    "l3": "128.163.232.71",
+    "l2": "10.10.1.2"
+  },
+  "localhost": {
+    "hostname": "localhost"
   }
-]
+}
