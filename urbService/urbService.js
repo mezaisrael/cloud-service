@@ -189,7 +189,6 @@ app.post('/request', (req, res) => {
         activeJobs.push({...req.body, id, allocation, layer});
         writeActiveJobs();
 
-        // TODO: Post to proper job server
         const serverInfo = getServerInfo(allocation);
         const postTarget = layer === 2 ? serverInfo.l2 : serverInfo.l3;
         console.log(`[EVENT] Posting job ${id} - ${req.body.requestName} to ${allocation} @ ${serverInfo.hostname} - layer: ${layer} - ip: ${postTarget}`);
@@ -200,7 +199,7 @@ app.post('/request', (req, res) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ ...req.body, id, allocation, layer })
-        })
+        });
 
         // Create callback to terminate job and move from active to completed list.
         const jobRunTimeMs = moment.unix(req.body.endTime).diff(moment(), 'ms');
@@ -370,9 +369,24 @@ const queueNextJob = () => {
                 if(activeJob.id === j.id) {
                     activeJob.allocation = allocation;
                     activeJob.endTime = moment().add(j.duration, 's').unix();
+                    // Post queue -> active to correct datacenter
+                    const serverInfo = getServerInfo(allocation);
+                    const layer = j.fileSize >= BANDWIDTH_THRESHOLD ? 2 : 3;
+                    const postTarget = layer === 2 ? serverInfo.l2 : serverInfo.l3;
+                    // Posting job id
+                    console.log(`[EVENT] Updating from queue: ${activeJob.requestName} - ${activeJob.id} -> ${allocation}`);
+                    fetch(`http://${postTarget}:3000/request`, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ ...activeJob })
+                    });
                 }
             });
             writeActiveJobs();
+
 
             const jobRunTimeMs = moment().add(j.duration, 's').diff(moment(), 'ms');
             setTimeout(() => {
