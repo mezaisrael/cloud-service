@@ -6,6 +6,7 @@ const fs = require('fs');
 const cors = require('cors');
 const moment = require('moment');
 const io = require('socket.io')(server);
+const fetch = require('node-fetch');
 
 app.use(cors());
 
@@ -184,6 +185,16 @@ app.post('/request', (req, res) => {
         console.log(`[EVENT] Assigning request[${req.body.requestName}] - ${allocation}`);
         activeJobs.push({...req.body, id, allocation, layer});
         writeActiveJobs();
+
+        // TODO: Post to proper job server
+        fetch(`http://localhost:3000/request`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ...req.body, id, allocation, layer })
+        })
 
         // Create callback to terminate job and move from active to completed list.
         const jobRunTimeMs = moment.unix(req.body.endTime).diff(moment(), 'ms');

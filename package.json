@@ -5,7 +5,7 @@
   "main": "dataCenter/dataCenter.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "datacenter": "node ./dataCenter/dataCenter.js",
+    "datacenter": "node ./dataCenter/dataCenterService.js",
     "urb": "node ./urbService/urbService.js",
     "urb-debug": "node --inspect ./urbService/urbService.js"
   },
@@ -20,6 +20,7 @@
     "jquery": "^3.4.0",
     "jsdom": "^15.0.0",
     "moment": "^2.24.0",
+    "node-fetch": "^2.5.0",
     "pretty": "^2.0.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0"
