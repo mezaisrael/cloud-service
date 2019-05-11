@@ -4,11 +4,13 @@ let currentJobs = [];
 
 let jobHistory = [];
 
+const serverConfig = require('../server-config');
+
 // Local host for dev work
 // const endPoint = 'http://localhost:3000';
 
 // URB Actual
-const endPoint = 'http://pcvm1-14.instageni.wisc.edu:3000';
+const endPoint = `http://${serverConfig.urb.hostname}:3000`;
 
 var socket = io(endPoint);
 socket.on('job-update', (update) => {
