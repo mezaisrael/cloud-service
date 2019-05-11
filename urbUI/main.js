@@ -5,49 +5,49 @@ let currentJobs = [];
 let jobHistory = [];
 
 const serverConfig = {
-	"urb": {
-		"hostname": "pcvm2-15.lan.sdn.uky.edu",
-		"l3": "128.163.232.78",
-		"l2": "10.10.4.6"
-	},
-	"dashboard": {
-		"hostname": "pcvm3-12.lan.sdn.uky.edu",
-		"l3": "128.163.232.80",
-		"l2": "10.10.10.23"
-	},
-	"east1": {
-		"hostname": "pcvm1-3.lan.sdn.uky.edu",
-		"l3": "128.163.232.69",
-		"l2": "10.10.10.20"
-	},
-	"east2": {
-		"hostname": "pcvm2-12.lan.sdn.uky.edu",
-		"l3": "128.163.232.75",
-		"l2": "10.10.10.21"
-	},
-	"north1": {
-		"hostname": "pcvm5-5.lan.sdn.uky.edu",
-		"l3": "128.163.232.86",
-		"l2": "10.10.2.3"
-	},
-	"north2": {
-		"hostname": "pcvm5-7.lan.sdn.uky.edu",
-		"l3": "128.163.232.88",
-		"l2": "10.10.2.4"
-	},
-	"west1": {
-		"hostname": "pcvm3-13.lan.sdn.uky.edu",
-		"l3": "128.163.232.81",
-		"l2": "10.10.1.1"
-	},
-	"west2": {
-		"hostname": "pcvm1-5.lan.sdn.uky.edu",
-		"l3": "128.163.232.71",
-		"l2": "10.10.1.2"
-	},
-	"localhost": {
-		"hostname": "localhost"
-	}
+    "urb": {
+        "hostname": "pcvm3-14.instageni.umkc.edu",
+        "l3": "204.76.187.94",
+        "l2": "10.10.12.6"
+    },
+    "dashboard": {
+        "hostname": "pcvm1-9.instageni.umkc.edu",
+        "l3": "204.76.187.77",
+        "l2": "n/a"
+    },
+    "east1": {
+        "hostname": "pcvm2-20.instageni.umkc.edu",
+        "l3": "204.76.187.85",
+        "l2": "10.10.12.1"
+    },
+    "east2": {
+        "hostname": "pcvm1-10.instageni.umkc.edu",
+        "l3": "204.76.187.78",
+        "l2": "10.10.12.2"
+    },
+    "north1": {
+        "hostname": "pcvm3-13.instageni.umkc.edu",
+        "l3": "204.76.187.93",
+        "l2": "10.10.10.3"
+    },
+    "north2": {
+        "hostname": "pcvm2-24.instageni.umkc.edu",
+        "l3": "204.76.187.89",
+        "l2": "10.10.10.4"
+    },
+    "west1": {
+        "hostname": "pcvm3-15.instageni.umkc.edu",
+        "l3": "204.76.187.95",
+        "l2": "10.10.11.1"
+    },
+    "west2": {
+        "hostname": "pcvm3-16.instageni.umkc.edu",
+        "l3": "204.76.187.96",
+        "l2": "10.10.11.2"
+    },
+    "localhost": {
+        "hostname": "localhost"
+    }
 };
 
 // Local host for dev work

@@ -30,12 +30,12 @@
     "l2": "10.10.10.4"
   },
   "west1": {
-    "hostname": "",
+    "hostname": "pcvm3-15.instageni.umkc.edu",
     "l3": "204.76.187.95",
     "l2": "10.10.11.1"
   },
   "west2": {
-    "hostname": "",
+    "hostname": "pcvm3-16.instageni.umkc.edu",
     "l3": "204.76.187.96",
     "l2": "10.10.11.2"
   },

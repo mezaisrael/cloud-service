@@ -1,9 +1,24 @@
 # datacenter
-cloud computing project.
+CSCI Cloud Computing Project.
 
-once you download the project, you can run 
+First install the required dependencies
 ```
 $ npm install
-$ npm start
 ```
-after that it will be listening to post request
+
+After that, run the below commands to start the URB or datacenter service.
+
+For URB
+```$xslt
+npm run urb&
+```
+
+For DataCenter
+```$xslt
+npm run datacenter&
+```
+
+To check if service is running:
+```$xslt
+ps aux | grep node
+```
