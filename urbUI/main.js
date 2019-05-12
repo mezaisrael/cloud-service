@@ -132,6 +132,8 @@ const addDataToTable = (data) => {
 					urbInfo.hostname + '/cloud-service/urbUI'
 					:
 					serverInfo.hostname + '/cloud-service/dataCenter';
+		    const targetBlank = currentJob.allocation === 'queued' || currentJob.allocation === 'terminated' ?
+					"" : "_blank";
 		const rowClassName = i%2===1 ? 'alt' : '';
 		html += "<tr onclick='redirectToDataCenter(currentJob.allocation)' class=\""+ rowClassName +"\">" +
 					"<th>" + currentJob.id + "</th>" +
@@ -141,7 +143,7 @@ const addDataToTable = (data) => {
 					"<td>" + currentJob.backup + "</td>" +
 					"<td>" + timeDisplay + " </td>" +
 					// TODO: Once IP address are finalized, replace layer text with ip address.
-					"<td><a href='http://"+link+"' target=\"_blank\">"
+					"<td><a href='http://"+link+"' target='"+targetBlank+"'>"
 			+ currentJob.allocation + " (layer: "+ currentJob.layer + ")" +
 			"</a></td>" +
 			"</tr>"
