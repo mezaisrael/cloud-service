@@ -82,8 +82,8 @@ const endPoint = `http://${serverConfig.urb.hostname}:3000`;
 var socket = io(endPoint);
 socket.on('job-update', (update) => {
 	const data = JSON.parse(update);
-	currentJobs = sortDataByDomain(data.activeJobs);
-	jobHistory = sortDataByDomain(data.completedJobs);
+	currentJobs.sort((a, b) => a.id - b.id);
+	jobHistory.sort((a, b) => a.id - b.id);
 })
 
 let showCurrentJobs = () => {
