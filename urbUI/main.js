@@ -84,7 +84,7 @@ socket.on('job-update', (update) => {
 	const data = JSON.parse(update);
 
 	currentJobs = data.activeJobs.sort((a, b) => a.id - b.id);
-	jobHistory = data.completedJobs.sort((a, b) => a.id - b.id);
+	jobHistory = data.completedJobs.sort((a, b) => b.endTime - a.endTime);
 })
 
 let showCurrentJobs = () => {
